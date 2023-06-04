@@ -66,31 +66,53 @@ char **parse_param(char *file)
     }
     return (param);
 }
-char    **get_map(char *file)
+
+int check_line(char *str)
+{
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        if((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+char    **get_map(int fd)
 {
     char *str;
-    int fd;
-    int ;
+    int line;
     char **map;
 
-    fd = open(file, O_RDONLY);
+    line = 0;
     str = get_next_line(fd);
     while(str)
     {
-        if(str[0] == '1' || str[0] == '0')
+        if(check_line(str) == 1)
+            line++;
+        if(line == 6)
         {
-            
+            while(str)
+            {
+                str = get_next_line(fd);
+                if(!str)
+                    break ;
+                printf("%s\n", str);
+            }
         }
         str = get_next_line(fd);
     }
-
+    return (NULL);
 }
 
 void    parse_map(char *file)
 {
     char **map;
 
-    map = get_map(file);
+    map = get_map(open(file, O_RDONLY));
     
 }
 
