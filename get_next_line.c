@@ -1,17 +1,5 @@
 #include "cub3d.h"
 
-size_t	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
-}
-
 char	*ft_strchr(char *s, int c)
 {
 	int	i;
@@ -83,7 +71,7 @@ char	*get_rest(char *str)
 	return (rest);
 }
 
-char	*ft_strjoin(char *str, char *buff)
+char	*ft_strjoin_line(char *str, char *buff)
 {
 	char	*dest;
 	size_t	i;
@@ -131,7 +119,7 @@ char	*get_all_line(int fd, char *str)
 			return (NULL);
 		}
 		buff[byte] = '\0';
-		str = ft_strjoin(str, buff);
+		str = ft_strjoin_line(str, buff);
 		if (ft_strchr(str, '\n'))
 			break ;
 	}

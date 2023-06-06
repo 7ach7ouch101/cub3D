@@ -1,17 +1,5 @@
 #include "cub3d.h"
 
-int	ft_strncmp(char *s1,char *s2, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	if (n == 0)
-		return (0);
-	while ((s1[i] == s2[i] && i < (n - 1)) && (s1[i] != '\0' && s2[i] != '\0'))
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
 int check_file(char *file)
 {
     int i;
@@ -70,50 +58,51 @@ char **parse_param(char *file)
 int check_line(char *str)
 {
     int i;
+    int j;
 
+    j = 0;
     i = 0;
     while(str[i])
     {
-        if((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
+        if((str[0] == '\n' || (str[i] == ' ' && str[ft_strlen(str) - 2] == ' ')
+            || str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
             return (1);
         i++;
     }
     return (0);
 }
 
-char    **get_map(int fd)
+char    *get_map(int fd)
 {
     char *str;
-    int line;
-    char **map;
+    char *str1;
+    char *map;
+    int count;
 
-    line = 0;
     str = get_next_line(fd);
-    while(str)
-    {
-        if(check_line(str) == 1)
-            line++;
-        if(line == 6)
-        {
-            while(str)
-            {
-                str = get_next_line(fd);
-                if(!str)
-                    break ;
-                printf("%s\n", str);
-            }
-        }
+    while(str && check_line(str) == 1)
         str = get_next_line(fd);
+    map = ft_strjoin(get_next_line(fd), get_next_line(fd));
+    while(map)
+    {
+        map = ft_strjoin(get_next_line(fd), get_next_line(fd));
+        //printf("%s", map);
     }
-    return (NULL);
+    printf("%s", map);
+    return (map);
 }
 
 void    parse_map(char *file)
 {
-    char **map;
+    char *map;
 
     map = get_map(open(file, O_RDONLY));
-    
+    //int count = 0;
+    /*while(map[count] != '\0')
+    {
+        printf("%c", map[count]);
+        count++;
+    }*/
 }
 
 int main(int ac, char **av)
