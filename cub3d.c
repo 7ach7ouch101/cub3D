@@ -64,9 +64,14 @@ int check_line(char *str)
     i = 0;
     while(str[i])
     {
-        if((str[0] == '\n' || (str[i] == ' ' && str[ft_strlen(str) - 2] == ' ')
-            || str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
+        if((str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z'))
             return (1);
+        else if(str[0] == '\n')
+            return (1);
+        else if(str[i] == ' ' && str[ft_strlen(str) - 2] == ' ')
+            return (1);
+        /*else
+            return (0);*/
         i++;
     }
     return (0);
@@ -77,31 +82,36 @@ char    *get_map(int fd)
     char *str;
     char *str1;
     char *map;
-    int count;
 
     str = get_next_line(fd);
     while(str && check_line(str) == 1)
         str = get_next_line(fd);
-    map = ft_strjoin(get_next_line(fd), get_next_line(fd));
-    while(map)
+    free(str);
+    str1 = ft_strjoin(get_next_line(fd), get_next_line(fd));
+    map = malloc(1);
+    while(str1)
     {
-        map = ft_strjoin(get_next_line(fd), get_next_line(fd));
-        //printf("%s", map);
+        map = ft_strjoin(map, str1);
+        free(str1);
+        str1 = get_next_line(fd);
     }
-    printf("%s", map);
     return (map);
 }
 
 void    parse_map(char *file)
 {
     char *map;
+    char **fmap;
+
 
     map = get_map(open(file, O_RDONLY));
-    //int count = 0;
-    /*while(map[count] != '\0')
+    printf("%s", map);
+    /*fmap = ft_split(map, '\n');
+    int i = 0;
+    while(fmap[i])
     {
-        printf("%c", map[count]);
-        count++;
+        printf("%s\n", fmap[i]);
+        i++;
     }*/
 }
 
