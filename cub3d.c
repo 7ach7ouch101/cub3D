@@ -64,16 +64,23 @@ int check_line(char *str)
     i = 0;
     while(str[i])
     {
-        if((str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z'))
-            return (1);
-        else if(str[0] == '\n')
-            return (1);
-        else if(str[i] == ' ' && str[ft_strlen(str) - 2] == ' ')
-            return (1);
-        /*else
-            return (0);*/
+        if((str[0] == '\n') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
+            j++;
+        if((str[0] == ' ' && str[ft_strlen(str) - 2] == ' '))
+        {
+            while(str[i])
+            {
+                if((str[i] == '1' && str[i + 1] == '1') || (str[i] == '0' && str[i + 1] == '0')
+                    || (str[i] == 'N' || str[i + 1] == '0' || str[i + 1] == '1'))
+                    return (0);
+                i++;
+            }
+            j++;
+        }
         i++;
     }
+    if(j > 0)
+        return (1);
     return (0);
 }
 
@@ -84,10 +91,11 @@ char    *get_map(int fd)
     char *map;
 
     str = get_next_line(fd);
-    while(str && check_line(str) == 1)
+    while(check_line(str) == 1)
         str = get_next_line(fd);
+    str1 = get_next_line(fd);
+    str1 = ft_strjoin(str, str1);
     free(str);
-    str1 = ft_strjoin(get_next_line(fd), get_next_line(fd));
     map = malloc(1);
     while(str1)
     {
