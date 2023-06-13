@@ -1,5 +1,11 @@
 #include "cub3d.h"
 
+void    ft_error(char *str)
+{
+    printf("%s\n", str);
+    exit(0);
+}
+
 int check_file(char *file)
 {
     int i;
@@ -106,21 +112,43 @@ char    *get_map(int fd)
     return (map);
 }
 
+void    check_component(char **map)
+{
+    int player;
+    int i;
+    int j;
+
+    i = 0;
+    player = 0;
+    while(map[i])
+    {
+        j = 0;
+        while(map[i][j])
+        {
+            if(!(map[i][j] == '1' || map[i][j] == '0' || map[i][j] == ' ' 
+                || map[i][j] == 'N' || map[i][j] == 'W' || map[i][j] == 'S' || map[i][j] == 'E'))
+                ft_error("Error");
+            if(map[i][j] == 'N' || map[i][j] == 'W' || map[i][j] == 'S' || map[i][j] == 'E')
+                player++;
+            if(player > 1)
+                ft_error("To many players");
+            j++;
+        }
+        i++;
+    }
+}
+
 void    parse_map(char *file)
 {
-    char *map;
-    char **fmap;
+    char *tmp;
+    char **map;
+    int i;
 
-
-    map = get_map(open(file, O_RDONLY));
-    printf("%s", map);
-    /*fmap = ft_split(map, '\n');
-    int i = 0;
-    while(fmap[i])
-    {
-        printf("%s\n", fmap[i]);
-        i++;
-    }*/
+    i = 0;
+    tmp = get_map(open(file, O_RDONLY));
+    map = ft_split(tmp, '\n');
+    check_component(map);
+    
 }
 
 int main(int ac, char **av)
