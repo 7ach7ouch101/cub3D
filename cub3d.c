@@ -138,17 +138,83 @@ void    check_component(char **map)
     }
 }
 
+int search_for_lwall(char *str, int check_lwall)
+{
+    int i;
+
+    i = 0;
+    if(check_lwall)
+    {
+        while(str[i] == '1' || str[i] == ' ' && str[i])
+            i++;
+        if(i == ft_strlen(str))
+            return (1);
+        return (0);
+    }
+    i = 0;
+    while (str[i])
+    {
+        if (!(str[i + 1] == '1') && !(str[i + 1] == 'N') && !(str[i + 1] == 'W') && !(str[i + 1] == 'S') && !(str[i + 1] == 'E') && !(str[i + 1] == '0') && !(str[i + 1] == ' ') && str[i] == '1')
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+int search_for_fwall(char *str, int check_fwall)
+{
+    int i;
+
+    i = 0;
+    if(check_fwall)
+    {
+        while((str[i] == '1' || str[i] == ' ') && str[i])
+            i++;
+        if(i == ft_strlen(str))
+            return (1);
+        return (0);
+    }
+    i = 0;
+    while(!(str[i] == '1') && !(str[i] == 'N') && !(str[i] == 'W') && !(str[i] == 'S') && !(str[i] == 'E') && !(str[i] == '0'))
+        i++;
+    if(str[i] == '1')
+        return (1);
+    return (0);
+}
+
+void    check_s_by_walls(char **map)
+{
+    int i;
+    
+    i = 0;
+    while(map[i])
+    {
+        if(search_for_fwall(map[i], 0) == 1)
+        {
+            if(search_for_lwall(map[i], 0) == 1)
+                i++;
+            else
+                ft_error("MAP NOT SURROUNDED BY WALLS");
+        }
+        else
+            ft_error("MAP NOT SURROUNDED BY WALLS");
+    }
+    if((search_for_fwall(map[0], 1) == 1) && (search_for_lwall(map[i - 1], 1) == 1))
+    {
+        
+    }
+}
+
 void    parse_map(char *file)
 {
     char *tmp;
     char **map;
-    int i;
-
-    i = 0;
+    int i = 0;
+    int j;
     tmp = get_map(open(file, O_RDONLY));
     map = ft_split(tmp, '\n');
     check_component(map);
-    
+    check_s_by_walls(map);
 }
 
 int main(int ac, char **av)
