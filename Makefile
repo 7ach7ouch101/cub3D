@@ -4,9 +4,10 @@ CC = gcc
 RM = rm -f
 SRCS = cub3d.c get_next_line.c tools.c tools1.c
 OBJ = $(SRCS:.c=.o)
+MLX_API = -lmlx -framework OpenGL -framework AppKit
 
 $(NAME): $(OBJ) cub3d.h
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(MLX_API) $(OBJ) -o $(NAME)
 
 %.o: %.c cub3d.h
 	$(CC) $(CFLAGS) -c $< -o $@
