@@ -9,6 +9,12 @@
 #include <mlx.h>
 #include <math.h>
 
+#define WIN_HEIGHT 720
+#define WN_WIDTH 1024
+#define BLOCK_SIZE 20
+#define FOV 60.0 * (M_PI / 180.0)
+#define l3iba  (double)((WN_WIDTH/2.0) / tan(FOV / 2.0))
+
 typedef struct	s_image {
 	void	*img;
 	char	*addr;
@@ -22,7 +28,7 @@ typedef struct t_mlx_info
     void    *mlx_p;
     void    *mlx_w;
 
-}   s_mlx_info;
+}               s_mlx_info;
 
 typedef struct s_player
 {
@@ -39,33 +45,41 @@ typedef struct s_ray
     double x;
     double y;
     double a;
-} t_ray;
+}               t_ray;
 
 typedef struct s_tazi_data 
 {
-    t_image render;
     char    **map;
     char    **param;
-    int last;
-    int x_player;
-    int y_player;
-    t_ray ray[1024];
+    int     map_len_max; // x
+    int     map_wei_max; // y
+    t_image render;
+    t_ray ray[WN_WIDTH];
     s_mlx_info mlx;
     t_player p;
-    
-} t_tazi_data;
+}               t_tazi_data;
 
 
 char	*get_next_line(int fd);
 int	    ft_strlen(char *str);
 int	    ft_strncmp(char *s1,char *s2, size_t n);
+void    parse_map(char *file, t_tazi_data *data);
+char    **parse_param(char *file);
+int     check_file(char *file);
 char	*ft_strjoin(char *s1, char *s2);
 char	**ft_split(char *s, char c);
 void	my_mlx_pixel_put(t_image *data, int x, int y, int color);
-
-//remove later
-void draw_rectangle(void *mlx_ptr, void *win_ptr, int x, int y, int width, int height, int color, t_image *img);
-void draw_map(char **game_map, int map_width, int map_height, void *mlx_ptr, void *win_ptr, t_image *img);
-
+int     release(int keycode, t_tazi_data *data);
+int     press(int keycode, t_tazi_data *data);
+void    mlx_func(t_tazi_data *data);
+void    cast_ray(t_tazi_data *data);
+void    move(t_tazi_data *data);
+void    rotate(t_tazi_data *data);
+t_ray   ray_info(t_tazi_data *data, int i);
+void    horizontal_ray(t_tazi_data *data, t_ray *ray_h, double angl);
+void    vertical_ray(t_tazi_data *data, t_ray *ray_h, double angl);
+void    position_player(t_tazi_data *data);
+void draw_all(t_tazi_data *data);
+int et(void *i);
 
 #endif
