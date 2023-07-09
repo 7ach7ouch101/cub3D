@@ -79,7 +79,9 @@ t_ray   ray_info(t_tazi_data *data, int i);
 void    horizontal_ray(t_tazi_data *data, t_ray *ray_h, double angl);
 void    vertical_ray(t_tazi_data *data, t_ray *ray_h, double angl);
 void    position_player(t_tazi_data *data);
-void draw_all(t_tazi_data *data);
-int et(void *i);
+void    draw_all(t_tazi_data *data);
+char	*ft_strdup(char *s1);
+void	*ft_memcpy(void	*dst, char *src, int n);
+
 
 #endif

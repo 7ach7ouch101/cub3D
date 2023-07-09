@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-void	*ft_memcpy(void	*dst, const void *src, size_t n)
+void	*ft_memcpy(void	*dst, char *src, int n)
 {
 	const char	*s;
 	char		*d;

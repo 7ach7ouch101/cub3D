@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-hadd <hel-hadd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:26:02 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/06/28 01:35:30 by hel-hadd         ###   ########.fr       */
+/*   Updated: 2023/07/09 00:55:53 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,31 +45,87 @@ int check_file(char *file)
     return (1);
 }
 
+char *escape_spaces(char *str)
+{
+    int i;
+
+    i = 0;
+    while(str[i] && str[i] == ' ')
+        i++;
+    return (ft_strdup(&str[i]));
+}
+
+void    search(char *str, char **param)
+{
+    int i;
+
+    i = 0;
+
+    while(str[i])
+    {
+        if(ft_strncmp(&str[i], "NO", 2) == 0 && (!param[0]))
+            param[0] = escape_spaces(&str[i + 2]);
+        else if(ft_strncmp(&str[i], "SO", 2) == 0 && (!param[1]))
+            param[1] = escape_spaces(&str[i + 2]);
+        else if(ft_strncmp(&str[i], "WE", 2) == 0 && (!param[2]))
+            param[2] = escape_spaces(&str[i + 2]);
+        else if(ft_strncmp(&str[i], "EA", 2) == 0 && (!param[3]))
+            param[3] = escape_spaces(&str[i + 2]);
+        else if((ft_strncmp(&str[i], "F", 1) == 0) && (!param[4]))
+            param[4] = escape_spaces(&str[i + 1]);
+        else if((ft_strncmp(&str[i], "C", 1) == 0) && (!param[5]))
+            param[5] = escape_spaces(&str[i + 1]);
+        i++;
+    }
+}
+
+void    init_param(char **param)
+{
+    param[0] = NULL;
+    param[1] = NULL;
+    param[2] = NULL;
+    param[3] = NULL;
+    param[4] = NULL;
+    param[5] = NULL;
+}
+
+void    check_rgb(char **param)
+{
+    char *str;
+    int i;
+    int j;
+    j = 0;
+    i = 0;
+
+    while(param[4][i])
+    {
+        if(param[4][i] == ',')
+        {
+            ft_memcpy(str, &param[4][i], i);
+            //printf("%s\n", str);
+        }
+        i++;
+    }
+}
+
 char **parse_param(char *file)
 {
     char **param;
     int fd;
+    int fd2;
     char *str;
 
-    param = malloc(7 * sizeof(char*));
+    param = malloc(6 * sizeof(char*));
+    init_param(param);
     fd = open(file, O_RDONLY);
     str = get_next_line(fd);
     while(str)
     {
-        if(ft_strncmp(&str[0], "NO", 2) == 0)
-            param[0] = &str[3];
-        else if(ft_strncmp(&str[0], "SO", 2) == 0 && (ft_strncmp(&str[2], " ", 1) == 0))
-            param[1] = &str[3];
-        else if(ft_strncmp(&str[0], "WE", 2) == 0 && (ft_strncmp(&str[2], " ", 1) == 0))
-            param[2] = &str[3];
-        else if(ft_strncmp(&str[0], "EA", 2) == 0 && (ft_strncmp(&str[2], " ", 1) == 0))
-            param[3] = &str[3];
-        else if((ft_strncmp(&str[0], "F", 1) == 0) && (ft_strncmp(&str[1], " ", 1) == 0))
-            param[4] = &str[2];
-        else if((ft_strncmp(&str[0], "C", 1) == 0) && (ft_strncmp(&str[1], " ", 1) == 0))
-            param[5] = &str[2];
+        search(str, param);
+        free(str);
         str = get_next_line(fd);
     }
+    //check_rgb(param);
     return (param);
 }
 
@@ -177,6 +233,7 @@ void search_for_player(char **map)
         i++;
     }
 }
+
 int ft_count(char **map)//y
 {
     int i;
@@ -186,6 +243,7 @@ int ft_count(char **map)//y
         i++;
     return (i);
 }
+
 void    check_surroundedby_walls(char **map)
 {
     int i;
@@ -232,6 +290,7 @@ void    check_surroundedby_walls(char **map)
         i++;
     }
 }
+
 int find_max_line(char **map)
 {
     int i;
@@ -251,6 +310,7 @@ int find_max_line(char **map)
     }
     return (max);
 }
+
 char    **fill_map(char **map)
 {
     int i;

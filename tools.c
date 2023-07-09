@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int	ft_strncmp(char *s1,char *s2, size_t n)
+int	ft_strncmp(char *s1, char *s2, size_t n)
 {
 	size_t	i;
 
@@ -60,5 +60,31 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!p)
 		return (NULL);
 	p = merge(s1, s2, p);
+	return (p);
+}
+
+char	*ft_strdup(char *s1)
+{
+	int	a;
+	int	i;
+	char	*p;
+
+	i = 0;
+	a = ft_strlen(s1);
+	p = malloc((a + 1) * sizeof(char));
+	if (!p)
+		return (NULL);
+	while (i <= a)
+	{
+		if(s1[i] == '\n')
+		{
+			p[i] = '\0';
+			return (p);
+		}
+		p[i] = s1[i];
+		i++;
+	}
+	p[i] = '\0';
+	//free(s1);
 	return (p);
 }
