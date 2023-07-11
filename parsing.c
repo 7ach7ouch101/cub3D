@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:26:02 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/09 00:55:53 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/11 05:27:03 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ int check_file(char *file)
     i = 0;
 
     if(open(file, O_RDONLY) == -1)
-    {
-        printf("FILE NOT FOUND!!\n");
-        return (0);
-    }
+        ft_error("FILE NOT FOUND!!\n");
     while(file[i] != '.')
     {
         if(file[i + 1] == '.')
@@ -60,7 +57,6 @@ void    search(char *str, char **param)
     int i;
 
     i = 0;
-
     while(str[i])
     {
         if(ft_strncmp(&str[i], "NO", 2) == 0 && (!param[0]))
@@ -87,35 +83,93 @@ void    init_param(char **param)
     param[3] = NULL;
     param[4] = NULL;
     param[5] = NULL;
+    param[6] = NULL;
 }
 
-void    check_rgb(char **param)
+void    check_rgb(char *param, t_tazi_data *data, char type)
 {
     char *str;
     int i;
     int j;
-    j = 0;
-    i = 0;
+    int a;
 
-    while(param[4][i])
+    a = 0;
+    i = 0;
+    while(param[i])
     {
-        if(param[4][i] == ',')
+        j = 0;
+        while(param[i] >= '0' && param[i] <= '9')
         {
-            ft_memcpy(str, &param[4][i], i);
-            //printf("%s\n", str);
+            i++;
+            j++;
+        }
+        if(j > 0)
+        {
+            str = malloc(j + 1);
+            str[j] = '\0';
+            ft_memcpy(str, &param[i - j], j);
+            if (!(ft_atoi(str) >= 0 && ft_atoi(str) <= 255))
+                ft_error("Error");
+            if(type == 'f')
+                data->sF[a] = ft_atoi(str);
+            else if(type == 'c')
+                data->sC[a] = ft_atoi(str);
+            a++;
+            free(str);
         }
         i++;
     }
 }
 
-char **parse_param(char *file)
+void    check_threeC(char *param)
+{
+    int num;
+    int i;
+    int count;
+
+    count = 0;
+    i = 0;
+    while(param[i])
+    {
+        while(param[i] >= '0' && param[i] <= '9')
+        {
+            num++;
+            i++;
+        }
+        if(num > 0)
+            count++;
+        num = 0;
+        i++;
+    }
+    if(count != 3)
+        ft_error("Error");
+}
+
+int	create_trgb(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
+}
+
+void    check_files(char **param)
+{
+    if(open(param[0], O_RDONLY) == -1)
+        ft_error("FILE NOT FOUND!!");
+    if(open(param[1], O_RDONLY) == -1)
+        ft_error("FILE NOT FOUND!!");
+    if(open(param[2], O_RDONLY) == -1)
+        ft_error("FILE NOT FOUND!!");
+    if(open(param[3], O_RDONLY) == -1)
+        ft_error("FILE NOT FOUND!!");
+}
+
+char **parse_param(char *file, t_tazi_data *data)
 {
     char **param;
     int fd;
     int fd2;
     char *str;
 
-    param = malloc(6 * sizeof(char*));
+    param = malloc(7 * sizeof(char*));
     init_param(param);
     fd = open(file, O_RDONLY);
     str = get_next_line(fd);
@@ -125,7 +179,13 @@ char **parse_param(char *file)
         free(str);
         str = get_next_line(fd);
     }
-    //check_rgb(param);
+    check_files(param);
+    check_threeC(param[5]);//C
+    check_threeC(param[4]);//F
+    check_rgb(param[4], data, 'f');//F
+    check_rgb(param[5], data, 'c');//C
+    data->C = create_trgb(data->sC[0], data->sC[1], data->sC[2]);
+    data->F = create_trgb(data->sF[0], data->sF[1], data->sF[2]);
     return (param);
 }
 

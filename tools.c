@@ -76,15 +76,16 @@ char	*ft_strdup(char *s1)
 		return (NULL);
 	while (i <= a)
 	{
-		if(s1[i] == '\n')
-		{
-			p[i] = '\0';
-			return (p);
-		}
 		p[i] = s1[i];
 		i++;
 	}
+	a = 0;
+	while(p[a])
+	{
+		if(p[a] == '\n')
+			p[a] = '\0';
+		a++;
+	}
 	p[i] = '\0';
-	//free(s1);
 	return (p);
 }

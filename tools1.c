@@ -1,8 +1,8 @@
 #include "cub3d.h"
 
-void	*ft_memcpy(void	*dst, char *src, int n)
+void	*ft_memcpy(char	*dst, char *src, int n)
 {
-	const char	*s;
+	char	*s;
 	char		*d;
 
 	d = dst;
@@ -15,6 +15,7 @@ void	*ft_memcpy(void	*dst, char *src, int n)
 		d++;
 		s++;
 	}
+
 	return (dst);
 }
 
@@ -88,4 +89,29 @@ char	**ft_split(char *s, char c)
 		return (NULL);
 	p = fillarr(p, s, c);
 	return (p);
+}
+
+int	ft_atoi(char *str)
+{
+	int	res;
+	int	s;
+	int	i;
+
+	res = 0;
+	s = 1;
+	i = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			s = s * -1;
+		i++;
+	}
+	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
+	{
+		res = (str[i] - '0') + res * 10;
+		i++;
+	}
+	return (res * s);
 }

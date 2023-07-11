@@ -49,6 +49,10 @@ typedef struct s_ray
 
 typedef struct s_tazi_data 
 {
+    int     sC[3];
+    int     sF[3];
+    int     C;
+    int     F;
     char    **map;
     char    **param;
     int     map_len_max; // x
@@ -64,7 +68,7 @@ char	*get_next_line(int fd);
 int	    ft_strlen(char *str);
 int	    ft_strncmp(char *s1,char *s2, size_t n);
 void    parse_map(char *file, t_tazi_data *data);
-char    **parse_param(char *file);
+char    **parse_param(char *file, t_tazi_data *data);
 int     check_file(char *file);
 char	*ft_strjoin(char *s1, char *s2);
 char	**ft_split(char *s, char c);
@@ -81,7 +85,8 @@ void    vertical_ray(t_tazi_data *data, t_ray *ray_h, double angl);
 void    position_player(t_tazi_data *data);
 void    draw_all(t_tazi_data *data);
 char	*ft_strdup(char *s1);
-void	*ft_memcpy(void	*dst, char *src, int n);
+void	*ft_memcpy(char	*dst, char *src, int n);
+int	    ft_atoi(char *str);
 
 
 #endif
