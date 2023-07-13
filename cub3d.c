@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 21:39:12 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/11 05:26:02 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/13 00:28:23 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ int main(int ac, char **av)
         if(check_file(av[1]) == 0)
             return (0);
         data.param = parse_param(av[1], &data);
-        printf("%d\n", data.C);
-        printf("%d\n", data.F);
         parse_map(av[1], &data);
         position_player(&data);
         data.mlx.mlx_p = mlx_init();

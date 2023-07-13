@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:26:02 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/12 04:32:49 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/13 08:40:25 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,11 @@ void    check_files(char **param)
         ft_error("FILE NOT FOUND!!");
 }
 
+void    parse_rgb(char **param)
+{
+    
+}
+
 char **parse_param(char *file, t_tazi_data *data)
 {
     char **param;
@@ -180,6 +185,7 @@ char **parse_param(char *file, t_tazi_data *data)
         str = get_next_line(fd);
     }
     check_files(param);
+    //parse_rgb(param);
     check_threeC(param[5]);//C
     check_threeC(param[4]);//F
     check_rgb(param[4], data, 'f');//F
@@ -193,12 +199,13 @@ int check_line(char *str)
 {
     int i;
     int j;
-
+    
     j = 0;
     i = 0;
     while(str[i])
     {
-        if((str[0] == '\n') || (str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
+        if((str[0] == '\n') || (str[i] >= 'A' && str[i] <= 'Z' && !(str[i + 1] == '1')) 
+            || (str[i] >= 'a' && str[i] <= 'z' && !(str[i + 1] == '1')))
             j++;
         if((str[0] == ' ' && str[ft_strlen(str) - 2] == ' '))
         {
@@ -225,7 +232,7 @@ char    *get_map(int fd)
     char *map;
 
     str = get_next_line(fd);
-    while(check_line(str) == 1)
+    while(str && check_line(str) == 1)
         str = get_next_line(fd);
     str1 = get_next_line(fd);
     str1 = ft_strjoin(str, str1);
@@ -255,10 +262,7 @@ void    check_component(char **map)
         {
             if(!(map[i][j] == '1' || map[i][j] == '0' || map[i][j] == ' ' 
                 || map[i][j] == 'N' || map[i][j] == 'W' || map[i][j] == 'S' || map[i][j] == 'E'))
-                {
-                    // pause(); //something not right here;
                     ft_error("Error");
-                }
             if(map[i][j] == 'N' || map[i][j] == 'W' || map[i][j] == 'S' || map[i][j] == 'E')
                 player++;
             if(player > 1)
@@ -267,6 +271,8 @@ void    check_component(char **map)
         }
         i++;
     }
+    if (player == 0)
+        ft_error("No lilo player");
 }
 
 void search_for_player(char **map)
@@ -395,6 +401,53 @@ char    **fill_map(char **map)
     return (map);
 }
 
+void    check_map(char *tmp)
+{
+    int i;
+    int count;
+
+    count = 0;
+    i = 0;
+    if(!tmp[0])
+        ft_error("Map not found");
+    while(tmp[i])
+    {
+        if(tmp[i - 1] == '\n')
+        {
+            while(tmp[i] == ' ')
+            {
+                if(tmp[i + 1] == '\n')
+                    ft_error("Map is separated");
+                i++;
+            }
+        }
+        if (tmp[i - 1] == '\n' && tmp[i] == '\n' && tmp[i+1] != '\0' && tmp[i+1] != '\n')
+            ft_error("Map is separated");
+        i++;
+    }
+}
+
+void    check_firstandlast_line(char **map)
+{
+    int i;
+
+    i = 0;
+    while(map[0][i])
+    {
+        if(map[0][i] == 'N' || map[0][i] == 'E' || map[0][i] == 'W' || map[0][i] == 'S')
+            ft_error("MAP NOT SURROUNDED BY WALLS");
+        i++;
+    }
+    i = 0;
+    while(map[ft_count(map) - 1][i])
+    {
+        if(map[ft_count(map) - 1][i] == 'N' || map[ft_count(map) - 1][i] == 'E' || map[ft_count(map) - 1][i] == 'W' 
+            || map[ft_count(map) - 1][i] == 'S')
+            ft_error("MAP NOT SURROUNDED BY WALLS");
+        i++;
+    }
+}
+
 void    parse_map(char *file, t_tazi_data *data)
 {
     char *tmp;
@@ -402,8 +455,10 @@ void    parse_map(char *file, t_tazi_data *data)
     int i = 0;
 
     tmp = get_map(open(file, O_RDONLY));
+    check_map(tmp);
     map = ft_split(tmp, '\n');
     check_component(map);
+    check_firstandlast_line(map);
     search_for_player(map);
     check_surroundedby_walls(map);
     data->map_len_max = find_max_line(map);
