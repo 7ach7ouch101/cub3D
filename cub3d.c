@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 21:39:12 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/13 00:28:23 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/15 04:06:10 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ int main(int ac, char **av)
         mlx_loop(data.mlx.mlx_p);
     }
     else
-        printf("NOT ENOUGH ARGUMENTS !!\n");
+        printf("Error  ARG!!\n");
     return (0);
 }

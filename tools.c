@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 04:33:37 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/12 04:33:38 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/15 08:14:15 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!p)
 		return (NULL);
 	p = merge(s1, s2, p);
+	if (s1)
+	{
+		free(s1);
+		s1 = NULL;
+	}
 	return (p);
 }
 

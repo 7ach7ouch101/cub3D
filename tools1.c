@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 04:33:39 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/12 04:33:40 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/15 08:02:22 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,4 +126,40 @@ int	ft_atoi(char *str)
 		i++;
 	}
 	return (res * s);
+}
+
+void	*ft_memset(void *s, int c, int n)
+{
+	unsigned char	*p;
+	unsigned char	a;
+
+	p = s;
+	a = c;
+	while (n--)
+	{
+		*p = a;
+		p++;
+	}
+	return (s);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	char	*p;
+
+	p = s;
+	ft_memset (p, 0, n);
+}
+
+void	*ft_calloc(int count, int size)
+{
+	void	*p;
+	int		i;
+
+	i = 0;
+	p = malloc(size * count);
+	if (!p)
+		return (NULL);
+	ft_bzero(p, (count * size));
+	return (p);
 }

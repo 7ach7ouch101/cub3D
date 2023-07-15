@@ -11,7 +11,7 @@
 
 #define WIN_HEIGHT 720
 #define WN_WIDTH 1024
-#define BLOCK_SIZE 20
+#define BLOCK_SIZE 500
 #define FOV 60.0 * (M_PI / 180.0)
 #define l3iba  (double)((WN_WIDTH/2.0) / tan(FOV / 2.0))
 
@@ -65,6 +65,7 @@ typedef struct s_tazi_data
 
 
 char	*get_next_line(int fd);
+void	*ft_calloc(int count, int size);
 int	    ft_strlen(char *str);
 int	    ft_strncmp(char *s1,char *s2, size_t n);
 void    parse_map(char *file, t_tazi_data *data);

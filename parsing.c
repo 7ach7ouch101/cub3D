@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:26:02 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/13 08:40:25 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/15 08:14:52 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int check_file(char *file)
     i = 0;
 
     if(open(file, O_RDONLY) == -1)
-        ft_error("FILE NOT FOUND!!\n");
+        ft_error("FILE er FOUND!!\n");
     while(file[i] != '.')
     {
         if(file[i + 1] == '.')
@@ -129,6 +129,7 @@ void    check_threeC(char *param)
 
     count = 0;
     i = 0;
+    num = 0;
     while(param[i])
     {
         while(param[i] >= '0' && param[i] <= '9')
@@ -136,7 +137,7 @@ void    check_threeC(char *param)
             num++;
             i++;
         }
-        if(num > 0)
+        if(num != 0)
             count++;
         num = 0;
         i++;
@@ -153,18 +154,35 @@ int	create_trgb(int r, int g, int b)
 void    check_files(char **param)
 {
     if(open(param[0], O_RDONLY) == -1)
-        ft_error("FILE NOT FOUND!!");
+        ft_error("Error");
     if(open(param[1], O_RDONLY) == -1)
-        ft_error("FILE NOT FOUND!!");
+        ft_error("Error");
     if(open(param[2], O_RDONLY) == -1)
-        ft_error("FILE NOT FOUND!!");
+        ft_error("Error");
     if(open(param[3], O_RDONLY) == -1)
-        ft_error("FILE NOT FOUND!!");
+        ft_error("Error");
 }
 
 void    parse_rgb(char **param)
 {
-    
+    int j;
+
+    j = 0;
+    while(param[4][j])
+    {
+        if(param[4][j] == ' ' || (param[4][j] >= '0' && param[4][j] <= '9') || param[4][j] == ',')
+            j++;
+        else
+            ft_error("RGB syntax error");
+    }
+    j = 0;
+    while(param[5][j])
+    {
+        if(param[5][j] == ' ' || (param[5][j] >= '0' && param[5][j] <= '9') ||  param[5][j] == ',')
+            j++;
+        else
+            ft_error("RGB syntax error");
+    }
 }
 
 char **parse_param(char *file, t_tazi_data *data)
@@ -184,8 +202,9 @@ char **parse_param(char *file, t_tazi_data *data)
         free(str);
         str = get_next_line(fd);
     }
+    //check_exe(param);//xpm
     check_files(param);
-    //parse_rgb(param);
+    parse_rgb(param);
     check_threeC(param[5]);//C
     check_threeC(param[4]);//F
     check_rgb(param[4], data, 'f');//F
@@ -204,8 +223,9 @@ int check_line(char *str)
     i = 0;
     while(str[i])
     {
-        if((str[0] == '\n') || (str[i] >= 'A' && str[i] <= 'Z' && !(str[i + 1] == '1')) 
-            || (str[i] >= 'a' && str[i] <= 'z' && !(str[i + 1] == '1')))
+        if((str[0] == '\n') || (str[i] >= 'A' && str[i] <= 'Z' && !(str[i + 1] == '1') 
+            && !(str[i + 1] == '0') && !(str[i] == 'N') && !(str[i] == 'E') && !(str[i] == 'W') && !(str[i] == 'S')) 
+            || (str[i] >= 'a' && str[i] <= 'z' && !(str[i + 1] == '1') && !(str[i + 1] == '0')))
             j++;
         if((str[0] == ' ' && str[ft_strlen(str) - 2] == ' '))
         {
@@ -225,6 +245,27 @@ int check_line(char *str)
     return (0);
 }
 
+int    check_line1(char *str)
+{
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        while(str[i] == ' ' || str[i] == '\n')
+            i++;
+        if (!str[i])
+            return (0);
+        if (!((ft_strncmp(&str[i], "WE", 2) == 0) || (ft_strncmp(&str[i], "EA", 2) == 0) || (ft_strncmp(&str[i], "SO", 2) == 0) || (ft_strncmp(&str[i], "NO", 2) == 0)
+            || (str[i] == 'F') || (str[i] == 'C')))
+            ft_error("Bad conf file");
+        else
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 char    *get_map(int fd)
 {
     char *str;
@@ -232,18 +273,26 @@ char    *get_map(int fd)
     char *map;
 
     str = get_next_line(fd);
-    while(str && check_line(str) == 1)
+    map = NULL;
+    while(str && (check_line(str) == 1))
+    {
+        if (check_line1(str))
+            ft_error("config lilo ghalat");
+        free(str);
         str = get_next_line(fd);
+    }
     str1 = get_next_line(fd);
-    str1 = ft_strjoin(str, str1);
-    free(str);
-    map = calloc(1, 1);
+    str = ft_strjoin(str, str1);
+    free(str1);
+    str1 = str;
+    map = ft_calloc(1, 1);//ahya
     while(str1)
     {
         map = ft_strjoin(map, str1);
         free(str1);
         str1 = get_next_line(fd);
     }
+    free(str1);
     return (map);
 }
 
@@ -300,7 +349,7 @@ void search_for_player(char **map)
     }
 }
 
-int ft_count(char **map)//y
+int ft_count(char **map)
 {
     int i;
 
@@ -421,8 +470,8 @@ void    check_map(char *tmp)
                 i++;
             }
         }
-        if (tmp[i - 1] == '\n' && tmp[i] == '\n' && tmp[i+1] != '\0' && tmp[i+1] != '\n')
-            ft_error("Map is separated");
+        // if (tmp[i - 1] == '\n' && tmp[i] == '\n' && tmp[i+1] != '\0' && tmp[i+1] != '\n')//error map
+        //     ft_error("Map is separated");
         i++;
     }
 }
@@ -457,8 +506,9 @@ void    parse_map(char *file, t_tazi_data *data)
     tmp = get_map(open(file, O_RDONLY));
     check_map(tmp);
     map = ft_split(tmp, '\n');
-    check_component(map);
+    free(tmp);
     check_firstandlast_line(map);
+    check_component(map);
     search_for_player(map);
     check_surroundedby_walls(map);
     data->map_len_max = find_max_line(map);
