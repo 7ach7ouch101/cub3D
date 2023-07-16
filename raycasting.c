@@ -6,7 +6,7 @@
 /*   By: hel-hadd <hel-hadd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 23:30:11 by hel-hadd          #+#    #+#             */
-/*   Updated: 2023/06/28 11:22:44 by hel-hadd         ###   ########.fr       */
+/*   Updated: 2023/07/15 06:47:54 by hel-hadd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_ray ray_info(t_tazi_data *data, int i)
 
         c = cos(angl - data->p.a);
 
-        
+        ray_h.bol = 1;
         ray_h.dist = ray_h.dist * c;
 
         return(ray_h);
@@ -103,8 +103,8 @@ t_ray ray_info(t_tazi_data *data, int i)
 
     else
     {
-         c = cos(angl - data->p.a);
-
+        c = cos(angl - data->p.a);
+        ray_h.bol = 0;
         ray_v.dist = ray_v.dist * c;
         return(ray_v);
     }

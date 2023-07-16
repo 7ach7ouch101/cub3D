@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 04:33:37 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/15 08:14:15 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/16 04:40:02 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*ft_strdup(char *s1)
 {
-	int	a;
-	int	i;
+	int		a;
+	int		i;
 	char	*p;
 
 	i = 0;
@@ -97,9 +97,9 @@ char	*ft_strdup(char *s1)
 		i++;
 	}
 	a = 0;
-	while(p[a])
+	while (p[a])
 	{
-		if(p[a] == '\n')
+		if (p[a] == '\n')
 			p[a] = '\0';
 		a++;
 	}

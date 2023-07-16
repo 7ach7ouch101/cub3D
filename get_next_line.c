@@ -6,29 +6,11 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 04:33:51 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/12 04:33:52 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/16 03:43:45 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-char	*ft_strchr(char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	if (c == '\0')
-		return ((char *)&s[ft_strlen(s)]);
-	while (s[i] != '\0')
-	{
-		if (s[i] == (char) c)
-			return ((char *)&s[i]);
-		i++;
-	}
-	return (0);
-}
 
 char	*get_line(char *str)
 {
@@ -83,11 +65,11 @@ char	*get_rest(char *str)
 	return (rest);
 }
 
-char	*ft_strjoin_line(char *str, char *buff)
+char	*ft_strjoin_l(char *str, char *buff)
 {
 	char	*dest;
-	size_t	i;
-	size_t	j;
+	int		i;
+	int		j;
 
 	i = -1;
 	j = -1;
@@ -131,7 +113,7 @@ char	*get_all_line(int fd, char *str)
 			return (NULL);
 		}
 		buff[byte] = '\0';
-		str = ft_strjoin_line(str, buff);
+		str = ft_strjoin_l(str, buff);
 		if (ft_strchr(str, '\n'))
 			break ;
 	}
