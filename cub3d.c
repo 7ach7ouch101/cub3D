@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 21:39:12 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/16 05:39:19 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/16 08:59:23 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	init_data(t_tazi_data *data)
 	data->render.bits_per_pixel = 0;
 	data->render.line_length = 0;
 	data->render.endian = 0;
+	data->i = 0;
+	data->j = 0;
 }
 
 int	main(int ac, char **av)

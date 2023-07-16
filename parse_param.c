@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 01:27:12 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/16 05:14:24 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/16 09:00:22 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	check_xpm(char *param, t_tazi_data *data)
 	int	i;
 
 	i = 0;
-	while (param[i] != '.')
+	while (param && param[i] != '.')
 	{
 		if (param[i + 1] == '.')
 		{
@@ -69,6 +69,9 @@ void	check_xpm(char *param, t_tazi_data *data)
 
 void	check_exe(char **param, t_tazi_data *data)
 {
+	if (!data->param[0] || !data->param[1] || !data->param[2]
+		|| !data->param[3] || !data->param[4] || !data->param[5])
+		ft_error("Error param", data);
 	if (!(param))
 		ft_error("allocation error", data);
 	check_xpm(param[0], data);
@@ -83,6 +86,8 @@ void	parse_param(char *file, t_tazi_data *data)
 	char	*str;
 
 	data->param = malloc(6 * sizeof(char *));
+	if (!data->param)
+		ft_error("allocation error", data);
 	init_param(data->param);
 	fd = open(file, O_RDONLY);
 	str = get_next_line(fd);

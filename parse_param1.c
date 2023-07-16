@@ -6,7 +6,7 @@
 /*   By: mmeziani <mmeziani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 02:29:22 by mmeziani          #+#    #+#             */
-/*   Updated: 2023/07/16 05:15:58 by mmeziani         ###   ########.fr       */
+/*   Updated: 2023/07/16 08:58:41 by mmeziani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,29 +45,23 @@ void	init_param(char **param)
 	param[5] = NULL;
 }
 
-int	check_rgb1(char *param, t_tazi_data *data, char type, int j)
+void	check_rgb1(char *param, t_tazi_data *data, int i, int j)
 {
 	char	*str;
-	int		a;
 
-	a = 0;
 	if (j > 0)
 	{
 		str = malloc(j + 1);
 		if (!(str))
 			ft_error("malloc error", data);
 		str[j] = '\0';
-		ft_memcpy(str, &*(param) - j, j);
+		ft_memcpy(str, &param[i - j], j);
 		if (!(ft_atoi(str) >= 0 && ft_atoi(str) <= 255))
 			ft_error("Error", data);
-		if (type == 'f')
-			data->sf[a] = ft_atoi(str);
-		else if (type == 'c')
-			data->sc[a] = ft_atoi(str);
-		a++;
+		data->sf[data->i] = ft_atoi(str);
+		data->i++;
 		free(str);
 	}
-	return (a);
 }
 
 void	check_rgb(char *param, t_tazi_data *data, char type)
@@ -84,7 +78,10 @@ void	check_rgb(char *param, t_tazi_data *data, char type)
 			i++;
 			j++;
 		}
-		check_rgb1(&param[i], data, type, j);
+		if (type == 'f')
+			check_rgb1(param, data, i, j);
+		if (type == 'c')
+			check_rgb2(param, data, i, j);
 		i++;
 	}
 }
